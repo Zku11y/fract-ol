@@ -1,31 +1,46 @@
 NAME = fractol
 
-SRC = src/fractol.c
+SRC = src/fractol.c src/parse.c src/Mandelbrot.c
 OBJ = $(SRC:.c=.o)
 
-MLX_DIR = minilibx
-MLX_LIB = $(MLX_DIR)/libmlx.a
+MLX_DIR = MLX42
+MLX_LIB = $(MLX_DIR)/mlx42lib/libmlx42.a
 MLX_INC = -I$(MLX_DIR)
+LIBFT_DIR = libft
+LIBFT_LIB = $(LIBFT_DIR)/libft.a
+LIBFT_INC = -I$(LIBFT_DIR)
+PRINTF_DIR = printf
+PRINTF_LIB = $(PRINTF_DIR)/libftprintf.a
+PRINTF_INC = -I$(PRINTF_DIR)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(MLX_INC)
+CFLAGS = -Wall -Wextra -Werror $(MLX_INC) $(LIBFT_INC) $(PRINTF_INC)
 
-# Use LDFLAGS only in the linking step
-LDFLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+LDFLAGS = -L$(MLX_DIR) -framework Cocoa -framework OpenGL -framework IOKit
 
-$(NAME): $(OBJ) $(MLX_LIB)
-	$(CC) $(OBJ) $(LDFLAGS) -o $(NAME)
+$(NAME): $(OBJ) $(MLX_LIB) $(LIBFT_LIB) $(PRINTF_LIB)
+	cc $(SRC) $(MLX_LIB) $(LIBFT_LIB) $(PRINTF_LIB) -Iinclude -lglfw -L"/Users/mdakni/.brew/opt/glfw/lib/" -o $(NAME)
 
 $(MLX_LIB):
 	make -C $(MLX_DIR)
+
+$(LIBFT_LIB):
+	make -C $(LIBFT_DIR)
+
+$(PRINTF_LIB):
+	make -C $(PRINTF_DIR)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJ)
+	make -C $(LIBFT_DIR) clean
+	make -C $(PRINTF_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
+	make -C $(LIBFT_DIR) fclean
+	make -C $(PRINTF_DIR) fclean
 
 re: fclean $(NAME)

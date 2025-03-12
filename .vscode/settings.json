@@ -2,7 +2,10 @@
   "files.associations": {
     "mlx_int.h": "c",
     "mman.h": "c",
-    "xlib.h": "c"
+    "xlib.h": "c",
+    "mlx42.h": "c",
+    "fractol.h": "c",
+    "mlx42_int.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "clang",
   "C_Cpp_Runner.cppCompilerPath": "clang++",
