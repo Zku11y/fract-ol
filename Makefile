@@ -1,6 +1,6 @@
 NAME = fractol
 
-SRC = src/fractol.c src/parse.c src/Mandelbrot.c
+SRC = src/fractol.c src/parse.c src/Mandelbrot.c src/julia.c src/burning_ship.c
 OBJ = $(SRC:.c=.o)
 
 MLX_DIR = MLX42

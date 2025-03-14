@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:48:29 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/12 22:44:25 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/13 22:35:04 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,19 @@
 
 void color(t_mlx *mlx, double iter)
 {
-    // u_int32_t value;
-    // u_int32_t r;
-    // u_int32_t g;
-    // u_int32_t b;
+    u_int32_t r;
+    u_int32_t g;
+    u_int32_t b;
 
-    // if(iter == (double)max_iter)
-    // {
-    //     mlx->color = 0x000000FF;
-    //     return;
-    // }
-    // value = (iter / max_iter) * 0xFF;
-    // r = (u_int32_t)value * 65280;
-    // g = (u_int32_t)value * 60;
-    // b = (u_int32_t)value * 0;
-    // mlx->color = r + g + b + 255;
-if (iter >= (double)max_iter)
+    if (iter >= (double)max_iter)
     {
         mlx->color = 0x000000FF;
         return;
     }
 
-    // double t = iter / (double)max_iter;
-    u_int32_t r = (u_int32_t)(sin(0.8 * iter + 1) * 127 + 128);
-    u_int32_t g = (u_int32_t)(sin(0.7 * iter + 3) * 127 + 128);
-    u_int32_t b = (u_int32_t)(sin(0.6 * iter + 5) * 127 + 128);
+    r = (u_int32_t)fmin(fmax(sin(0.1 * iter + 1) * 127 + 128, 0), 255);
+    g = (u_int32_t)fmin(fmax(sin(0.1 * iter + 2) * 127 + 128, 0), 255);
+    b = (u_int32_t)fmin(fmax(sin(0.1 * iter + 5) * 127 + 128, 0), 255);
     mlx->color = (r << 24) | (g << 16) | (b << 8) | 0xFF;
 }
 
@@ -48,6 +36,7 @@ void equation(t_mlx *mlx)
     double iter;
     double temp;
 
+    printf("zi = %.1lf zr = %.1lf cr = %.1lf ci = %.1lf\n", mlx->zi, mlx->zr, mlx->cr, mlx->ci);
     mlx->zi = 0;
     mlx->zr = 0;
     iter = 0;
@@ -56,9 +45,10 @@ void equation(t_mlx *mlx)
         temp = (mlx->zr * mlx->zr) - (mlx->zi * mlx->zi)+ mlx->cr;
         mlx->zi = (2 * mlx->zr * mlx->zi) + mlx->ci;
         mlx->zr = temp;
-        iter++;
+        iter = iter + 0.5;
     }
-    color(mlx, (double)iter);
+    // color(mlx, (double)iter);
+    burning_color(mlx, (double)iter);
 }
 
 void mandelbrot(mlx_image_t *image, t_mlx *mlx)
@@ -69,12 +59,11 @@ void mandelbrot(mlx_image_t *image, t_mlx *mlx)
     y = 0;
     while(y < HEIGHT)
     {
-        mlx->ci = (((y / (double)HEIGHT) * (img_max - img_min) + img_min) * mlx->zoom) + mlx->up_down; // multiply by value to zoom    
+        mlx->ci = ((((double)y / (double)HEIGHT) * (img_max - img_min)) * mlx->zoom) + img_min + mlx->up_down; // multiply by value to zoom    
         x = 0;
         while(x < WIDTH)
         {
-            mlx->cr = (((x / (double)WIDTH) * (real_max - real_min) + real_min) * mlx->zoom) + mlx->left_right; // multiply by value to zoom
-            // printf("%.1lf%+.1lfi\n", mlx->cr, mlx->ci);
+            mlx->cr = ((((double)x / (double)WIDTH) * (real_max - real_min)) * mlx->zoom) + real_min + mlx->left_right; // multiply by value to zoom
             equation(mlx);
             mlx_put_pixel(image, x, y, mlx->color);
             x++;
