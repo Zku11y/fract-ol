@@ -1,6 +1,9 @@
 NAME = fractol
 
-SRC = src/fractol.c src/parse.c src/Mandelbrot.c src/julia.c src/burning_ship.c
+SRC = src/fractol.c src/parse.c src/Mandelbrot.c \
+	  src/julia.c src/burning_ship.c src/input.c \
+	  src/misc.c
+
 OBJ = $(SRC:.c=.o)
 
 MLX_DIR = MLX42
@@ -14,7 +17,7 @@ PRINTF_LIB = $(PRINTF_DIR)/libftprintf.a
 PRINTF_INC = -I$(PRINTF_DIR)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(MLX_INC) $(LIBFT_INC) $(PRINTF_INC)
+CFLAGS = -g -Wall -Wextra -Werror $(MLX_INC) $(LIBFT_INC) $(PRINTF_INC)
 
 LDFLAGS = -L$(MLX_DIR) -framework Cocoa -framework OpenGL -framework IOKit
 

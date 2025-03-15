@@ -1,4 +1,7 @@
 {
+  "[c]": {
+      "editor.defaultFormatter": "keyhr.42-c-format"
+  },
   "files.associations": {
     "mlx_int.h": "c",
     "mman.h": "c",
