@@ -1,32 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:29:13 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/15 15:55:42 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/04/02 13:25:14 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../fractol.h"
+#include "fractol_bonus.h"
 
 int	parse(int ac, char **av)
 {
-	if (ac == 2 && ft_strncmp(av[1], "mandelbrot", 10) == 0)
+	if (ac == 2 && ft_strncmp(av[1], "mandelbrot\0", 11) == 0)
 		return (1);
-	else if (ac == 4 && ft_strncmp(av[1], "julia", 5) == 0)
+	else if (ac == 4 && ft_strncmp(av[1], "julia\0", 6) == 0)
 		return (2);
-	else if (ac == 2 && ft_strncmp(av[1], "burning_ship", 12) == 0)
+	else if (ac == 2 && ft_strncmp(av[1], "burning_ship\0", 13) == 0)
 		return (3);
 	return (error_msg(), -1);
 }
 
 void	check_args(char **av, t_mlx *mlx)
 {
+	mlx->real = av[2];
+	mlx->img = av[3];
 	mlx->cr = ft_atof(av[2]);
 	mlx->ci = ft_atof(av[3]);
+	if (mlx->cr > 2 || mlx->cr < -2 || mlx->ci > 2 || mlx->ci < -2)
+		return (error_msg());
 	if (mlx->cr > 2.0)
 		mlx->cr = 2.0;
 	else if (mlx->cr < -2.0)

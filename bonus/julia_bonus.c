@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   julia.c                                            :+:      :+:    :+:   */
+/*   julia_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:34:52 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/15 15:50:01 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/29 11:39:57 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../fractol.h"
+#include "fractol_bonus.h"
 
 void	mod_color(t_mlx *mlx, double iter)
 {
@@ -29,28 +29,6 @@ void	mod_color(t_mlx *mlx, double iter)
 	g = (uint32_t)(t * mlx->g * t * 255);
 	b = (uint32_t)(t * mlx->b * t * 255);
 	mlx->color = (r << 24) | (g << 16) | (b << 8) | 0xFF;
-}
-
-void	get_color(t_mlx *mlx, int iter)
-{
-	uint32_t	r;
-	uint32_t	g;
-	uint32_t	b;
-	double		t;
-
-	if (iter == mlx->max_iter)
-	{
-		mlx->color = 0x000000FF;
-		return ;
-	}
-	else
-	{
-		t = (double)iter / (double)mlx->max_iter;
-		r = (uint32_t)(9 * (1 - t) * t * t * t * 255);
-		g = (uint32_t)(15 * (1 - t) * (1 - t) * t * t * 255);
-		b = (uint32_t)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
-		mlx->color = (r << 24) | (g << 16) | (b << 8) | 0xFF;
-	}
 }
 
 void	equation_julia(t_mlx *mlx)
@@ -96,12 +74,20 @@ void	julia(mlx_image_t *image, t_mlx *mlx)
 		y++;
 	}
 	mlx_image_to_window(mlx->mlx, mlx->image, 0, 0);
+	put_string(mlx);
 }
 
-void	color_2(t_mlx *mlx, double iter)
+void	put_string(t_mlx *mlx)
 {
-	if (iter == mlx->max_iter)
-		mlx->color = 0x0000FF;
-	else
-		mlx->color = (iter / mlx->max_iter) * (0xFFFFFF);
+	char	*str;
+
+	if (mlx->flag == 2)
+	{
+		str = ft_strjoin("Real : ", mlx->real);
+		mlx_put_string(mlx->mlx, str, WIDTH - 170, 20);
+		free(str);
+		str = ft_strjoin("Img  : ", mlx->img);
+		mlx_put_string(mlx->mlx, str, WIDTH - 170, 60);
+		free(str);
+	}
 }

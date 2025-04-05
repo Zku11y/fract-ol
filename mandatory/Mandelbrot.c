@@ -6,29 +6,11 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:48:29 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/15 17:06:07 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/29 12:15:53 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../fractol.h"
-#include <stdio.h>
-
-void	color(t_mlx *mlx, double iter)
-{
-	u_int32_t	r;
-	u_int32_t	g;
-	u_int32_t	b;
-
-	if (iter >= (double)mlx->max_iter)
-	{
-		mlx->color = 0x000000FF;
-		return ;
-	}
-	r = (u_int32_t)fmin(fmax(sin(0.1 * iter + 1) * 127 + 128, 0), 255);
-	g = (u_int32_t)fmin(fmax(sin(0.1 * iter + 2) * 127 + 128, 0), 255);
-	b = (u_int32_t)fmin(fmax(sin(0.1 * iter + 5) * 127 + 128, 0), 255);
-	mlx->color = (r << 24) | (g << 16) | (b << 8) | 0xFF;
-}
+#include "fractol.h"
 
 void	equation(t_mlx *mlx)
 {

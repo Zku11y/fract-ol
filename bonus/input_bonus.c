@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   input_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:57:53 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/15 17:05:04 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/04/02 13:13:15 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../fractol.h"
+#include "fractol_bonus.h"
 
 void	zoom_input(mlx_key_data_t keydata, t_mlx *mlx)
 {
@@ -30,12 +30,6 @@ void	move_input(mlx_key_data_t keydata, t_mlx *mlx)
 		mlx->up_down = (mlx->up_down + 0.1 * mlx->zoom);
 	else if (keydata.key == MLX_KEY_DOWN || keydata.key == MLX_KEY_S)
 		mlx->up_down = (mlx->up_down - 0.1 * mlx->zoom);
-	else if (keydata.key == MLX_KEY_1)
-		mlx->flag = 1;
-	else if (keydata.key == MLX_KEY_2)
-		mlx->flag = 2;
-	else if (keydata.key == MLX_KEY_3)
-		mlx->flag = 3;
 	else if (keydata.key == MLX_KEY_N)
 		mlx->max_iter++;
 	else if (keydata.key == MLX_KEY_M && mlx->max_iter > 0)
@@ -65,13 +59,13 @@ void	color_input(mlx_key_data_t keydata, t_mlx *mlx)
 void	scroll_hook(double xdelta, double ydelta, void *param)
 {
 	t_mlx	*mlx;
+	int32_t	mouse_x;
+	int32_t	mouse_y;
 
-	mlx = (t_mlx *)param;
 	(void)xdelta;
-	if (ydelta > 0)
-		mlx->zoom *= 1.1;
-	else if (ydelta < 0)
-		mlx->zoom *= 0.9;
+	mlx = (t_mlx *)param;
+	mlx_get_mouse_pos(mlx->mlx, &mouse_x, &mouse_y);
+	calc_zoom_diff(mlx, mouse_x, mouse_y, ydelta);
 	if (mlx->flag == 1)
 		mandelbrot(mlx->image, mlx);
 	else if (mlx->flag == 2)
@@ -79,6 +73,7 @@ void	scroll_hook(double xdelta, double ydelta, void *param)
 	else
 		burning_ship(mlx->image, mlx);
 	mlx_image_to_window(mlx->mlx, mlx->image, 0, 0);
+	put_string(mlx);
 }
 
 void	key_hook(mlx_key_data_t keydata, void *param)
@@ -89,13 +84,7 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	if (keydata.action == MLX_PRESS)
 	{
 		if (keydata.key == MLX_KEY_ESCAPE)
-		{
-			if (mlx->image)
-				mlx_delete_image(mlx->mlx, mlx->image);
-			if (mlx->mlx)
-				mlx_terminate(mlx->mlx);
 			exit(EXIT_SUCCESS);
-		}
 		color_input(keydata, mlx);
 		zoom_input(keydata, mlx);
 		move_input(keydata, mlx);
@@ -107,4 +96,5 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	else
 		burning_ship(mlx->image, mlx);
 	mlx_image_to_window(mlx->mlx, mlx->image, 0, 0);
+	put_string(mlx);
 }

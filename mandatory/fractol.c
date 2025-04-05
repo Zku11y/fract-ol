@@ -6,12 +6,11 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:09:23 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/15 17:12:23 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/04/02 13:52:17 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../fractol.h"
-#include <time.h>
+#include "fractol.h"
 
 void	fractol(t_mlx *mlx)
 {
@@ -30,8 +29,6 @@ void	fractol(t_mlx *mlx)
 		mandelbrot(mlx->image, mlx);
 	else if (mlx->flag == 2)
 		julia(mlx->image, mlx);
-	else
-		burning_ship(mlx->image, mlx);
 }
 
 void	parse_check(int ac, char **av, t_mlx *mlx)
@@ -48,24 +45,14 @@ void	parse_check(int ac, char **av, t_mlx *mlx)
 		mlx->mlx = mlx_init(WIDTH, HEIGHT, "Julia", true);
 		mlx->flag = 2;
 	}
-	else if (parse(ac, av) == 3)
-	{
-		mlx->mlx = mlx_init(WIDTH, HEIGHT, "Burning_ship", true);
-		mlx->flag = 3;
-	}
 }
 
 int	main(int ac, char **av)
 {
 	t_mlx	mlx;
 
-	atexit(leak_check);
 	parse_check(ac, av, &mlx);
 	fractol(&mlx);
 	mlx_loop(mlx.mlx);
-	if (mlx.image)
-		mlx_delete_image(mlx.mlx, mlx.image);
-	if (mlx.mlx)
-		mlx_terminate(mlx.mlx);
 	return (0);
 }
